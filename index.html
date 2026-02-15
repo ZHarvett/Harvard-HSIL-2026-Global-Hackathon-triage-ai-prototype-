@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description"
+        content="TriageAI - Multimodal AI Triage Assistant for South African Primary Healthcare Clinics. HSIL 2026 Hackathon Prototype.">
+    <meta name="theme-color" content="#1a5276">
+    <title>TriageAI — Smart Clinic Triage</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- 
+        TriageAI Prototype — HSIL 2026 Hackathon Application
+        
+        Context: South African primary healthcare clinics face critical bottlenecks:
+        - 83% of patients experience long waiting times
+        - Nurses lose 23 working days/year to paperwork
+        - 80% of clinicians lose time to incomplete patient data
+        
+        This prototype demonstrates a multimodal triage interface that could run
+        on a tablet at clinic intake (e.g., Khayelitsha Site B CHC, Mitchells Plain CDC).
+        
+        Cape Triage Score (CTS) is the standard triage system used across South Africa.
+        This prototype simulates CTS-aligned acuity classification.
+        
+        NOTE: This is a concept prototype. No real patient data is collected or stored.
+        No clinical decisions should be made based on this demo.
+    -->
+</head>
+
+<body>
+    <!-- ============================================
+         SCREEN 1: Welcome & Language Selection
+         In SA PHC clinics, patients often speak isiXhosa, isiZulu, 
+         Afrikaans, or English. Language selection is critical for 
+         accessibility in multilingual communities.
+    ============================================= -->
+    <section id="screen-welcome" class="screen active">
+        <div class="screen-content">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="32" cy="32" r="30" stroke="currentColor" stroke-width="2.5" />
+                        <path d="M32 16v32M16 32h32" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                        <circle cx="32" cy="32" r="12" stroke="currentColor" stroke-width="1.5"
+                            stroke-dasharray="4 3" />
+                    </svg>
+                </div>
+                <h1 class="app-title">TriageAI</h1>
+                <p class="app-subtitle">Smart Clinic Triage Assistant</p>
+            </div>
+
+            <div class="welcome-info">
+                <p class="welcome-text">
+                    Welcome to the clinic. This assistant will help assess your symptoms
+                    so the sister can see you faster.
+                </p>
+                <p class="welcome-text-secondary">
+                    Wamkelekile eklinikhi. Le assistant iza kukunceda ukuhlola iimpawu zakho.
+                </p>
+            </div>
+
+            <div class="language-selection">
+                <p class="section-label">Select your language / Khetha ulwimi lwakho</p>
+                <div class="language-grid">
+                    <button class="language-btn selected" data-lang="en" onclick="selectLanguage('en')">
+                        <span class="lang-name">English</span>
+                    </button>
+                    <button class="language-btn" data-lang="xh" onclick="selectLanguage('xh')">
+                        <span class="lang-name">isiXhosa</span>
+                    </button>
+                    <button class="language-btn" data-lang="zu" onclick="selectLanguage('zu')">
+                        <span class="lang-name">isiZulu</span>
+                    </button>
+                    <button class="language-btn" data-lang="af" onclick="selectLanguage('af')">
+                        <span class="lang-name">Afrikaans</span>
+                    </button>
+                </div>
+            </div>
+
+            <button class="btn-primary btn-large" onclick="startAssessment()">
+                Begin Assessment
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            <div class="privacy-notice">
+                <svg viewBox="0 0 20 20" fill="currentColor" class="privacy-icon">
+                    <path d="M10 2L3 7v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V7l-7-5z" />
+                </svg>
+                <span>No personal data is stored. This is a screening tool only.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SCREEN 2: Symptom Input (Voice/Text)
+         Simulates multimodal input. In production, this would use
+         Whisper or similar ASR for voice-to-text in local languages.
+         The microphone UI demonstrates the intended interaction model.
+    ============================================= -->
+    <section id="screen-input" class="screen">
+        <div class="screen-content">
+            <header class="screen-header">
+                <button class="btn-back" onclick="goBack()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <div class="header-info">
+                    <h2>Tell us how you're feeling</h2>
+                    <p class="header-subtitle">Describe your symptoms</p>
+                </div>
+                <div class="step-indicator">1/3</div>
+            </header>
+
+            <div class="chat-container" id="chatContainer">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message system-message">
+                        <div class="message-avatar">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 7v10M7 12h10" stroke="white" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <div class="message-bubble">
+                            <p>Hello! I'm here to help assess your symptoms before you see the sister.</p>
+                            <p class="message-prompt">Please describe what's been bothering you. You can speak or type
+                                below.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="voice-input-container" id="voiceInputContainer">
+                    <button class="mic-button" id="micButton" onclick="toggleVoiceInput()">
+                        <div class="mic-pulse"></div>
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="mic-icon">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
+                            <line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
+                            <line x1="8" y1="23" x2="16" y2="23" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <span class="mic-label" id="micLabel">Tap to speak</span>
+                </div>
+                <div class="text-input-container">
+                    <textarea id="symptomInput" placeholder="Or type your symptoms here..." rows="2"
+                        maxlength="500"></textarea>
+                    <button class="send-button" id="sendButton" onclick="sendMessage()">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SCREEN 3: Follow-up Questions
+         The system asks structured questions based on initial symptoms.
+         This simulates the "agentic" behavior — contextual, adaptive questioning.
+         In production, an LLM would generate these; here they're rule-based.
+    ============================================= -->
+    <section id="screen-questions" class="screen">
+        <div class="screen-content">
+            <header class="screen-header">
+                <button class="btn-back" onclick="goBack()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <div class="header-info">
+                    <h2>A few more questions</h2>
+                    <p class="header-subtitle">Help us understand better</p>
+                </div>
+                <div class="step-indicator">2/3</div>
+            </header>
+
+            <div class="questions-container" id="questionsContainer">
+                <!-- Questions are dynamically inserted here -->
+            </div>
+
+            <div class="questions-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="questionProgress"></div>
+                </div>
+                <span class="progress-text" id="progressText">Question 1 of 4</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SCREEN 4: Clinical Summary (Nurse View)
+         This is the key output — what the nurse sees when the patient
+         arrives at the consultation room. Designed for quick scanning
+         during high-volume clinic days.
+         
+         Cape Triage Score colors:
+         - Red: Emergency (immediate)
+         - Orange: Very Urgent (within 10 min)
+         - Yellow: Urgent (within 60 min)  
+         - Green: Routine (within 240 min)
+         - Blue: Dead on arrival (not used in this prototype)
+    ============================================= -->
+    <section id="screen-summary" class="screen">
+        <div class="screen-content">
+            <header class="screen-header summary-header">
+                <div class="header-info">
+                    <h2>Clinical Summary</h2>
+                    <p class="header-subtitle">For nursing staff review</p>
+                </div>
+                <button class="btn-new-patient" onclick="resetAssessment()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    New Patient
+                </button>
+            </header>
+
+            <!-- Triage Acuity Banner -->
+            <div class="triage-banner" id="triageBanner">
+                <div class="triage-color-indicator" id="triageColorIndicator"></div>
+                <div class="triage-info">
+                    <span class="triage-level" id="triageLevel">YELLOW — URGENT</span>
+                    <span class="triage-time" id="triageTime">Target: within 60 minutes</span>
+                </div>
+                <div class="triage-score" id="triageScore">
+                    <span class="score-label">CTS</span>
+                    <span class="score-value">Y</span>
+                </div>
+            </div>
+
+            <!-- Patient Assessment Details -->
+            <div class="summary-sections">
+                <!-- Presenting Complaint -->
+                <div class="summary-card">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                        <h3>Presenting Complaint</h3>
+                    </div>
+                    <div class="card-body" id="presentingComplaint">
+                        <p>Patient reports persistent cough for approximately 3 weeks, accompanied by night sweats and
+                            unintentional weight loss.</p>
+                    </div>
+                </div>
+
+                <!-- Symptom Summary -->
+                <div class="summary-card">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11l3 3L22 4" />
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                        </svg>
+                        <h3>Symptoms Identified</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="symptom-list" id="symptomList">
+                            <!-- Dynamically populated -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Care Gaps / Flags -->
+                <div class="summary-card card-alert" id="careGapsCard">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                        <h3>Care Gaps Identified</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="gap-list" id="gapList">
+                            <!-- Dynamically populated -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Suggested Actions -->
+                <div class="summary-card card-actions">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 8v4l3 3" />
+                        </svg>
+                        <h3>Suggested Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <ol class="action-list" id="actionList">
+                            <!-- Dynamically populated -->
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Assessment Metadata -->
+                <div class="summary-meta">
+                    <div class="meta-row">
+                        <span class="meta-label">Assessment ID</span>
+                        <span class="meta-value" id="assessmentId">TRG-20260215-001</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Timestamp</span>
+                        <span class="meta-value" id="assessmentTime">15 Feb 2026, 10:32 SAST</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Language</span>
+                        <span class="meta-value" id="assessmentLang">English</span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Method</span>
+                        <span class="meta-value">AI-assisted pre-triage (prototype)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-disclaimer">
+                <p>⚠️ This is an AI-assisted pre-screening. Final triage classification must be confirmed by a qualified
+                    healthcare worker using the South African Triage Scale (SATS).</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HSIL Badge -->
+    <footer class="hsil-footer">
+        <div class="hsil-badge">
+            <span class="badge-text">HSIL 2026 Demo</span>
+            <span class="badge-separator">•</span>
+            <span class="badge-detail">Harvard Health Systems Innovation Lab</span>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/triage-engine.js"></script>
+    <script src="js/care-gaps.js"></script>
+    <script src="js/conversation.js"></script>
+    <script src="js/summary.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
