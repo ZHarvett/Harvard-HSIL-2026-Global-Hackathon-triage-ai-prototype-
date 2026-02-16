@@ -1,4 +1,5 @@
 #  TriageAI — Smart Clinic Triage Assistant
+Note that this is not a submission, this is just me playing with an idea
 
 **HSIL 2026 Hackathon Prototype** | Harvard Health Systems Innovation Lab
 
