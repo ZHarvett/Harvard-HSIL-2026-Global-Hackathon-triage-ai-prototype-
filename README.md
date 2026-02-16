@@ -1,4 +1,4 @@
-# 🏥 TriageAI — Smart Clinic Triage Assistant
+#  TriageAI — Smart Clinic Triage Assistant
 
 **HSIL 2026 Hackathon Prototype** | Harvard Health Systems Innovation Lab
 
@@ -10,7 +10,7 @@
 
 ---
 
-## 🎯 The Problem
+##  The Problem
 
 South African primary healthcare (PHC) clinics face critical bottlenecks that compromise patient care:
 
@@ -23,7 +23,7 @@ South African primary healthcare (PHC) clinics face critical bottlenecks that co
 
 In facilities like Khayelitsha Site B CHC or Mitchells Plain CDC, a single professional nurse may triage 60+ patients per day. The current paper-based process is slow, inconsistent, and misses opportunities for proactive care.
 
-## 💡 The Solution
+##  The Solution
 
 **TriageAI** is a tablet/phone-based triage assistant that runs at clinic intake. It:
 
@@ -49,10 +49,10 @@ The prototype implements the [South African Triage Scale (SATS)](https://emssa.o
 
 | Color | Level | Target Time | Example Triggers |
 |-------|-------|-------------|-----------------|
-| 🔴 Red | Emergency | Immediate | Chest pain + breathing difficulty, altered consciousness |
-| 🟠 Orange | Very Urgent | 10 minutes | Severe pain, high fever with confusion |
-| 🟡 Yellow | Urgent | 60 minutes | TB risk symptoms, persistent cough >2 weeks |
-| 🟢 Green | Routine | 240 minutes | Mild symptoms, follow-up visits |
+|  Red | Emergency | Immediate | Chest pain + breathing difficulty, altered consciousness |
+|  Orange | Very Urgent | 10 minutes | Severe pain, high fever with confusion |
+|  Yellow | Urgent | 60 minutes | TB risk symptoms, persistent cough >2 weeks |
+|  Green | Routine | 240 minutes | Mild symptoms, follow-up visits |
 
 ### Care Gap Detection
 
@@ -86,7 +86,7 @@ index.html              # Single-page app with 4 screen sections
 - **Keyword matching**: Simple but effective symptom detection (production would use LLM)
 - **State machine**: Conversation flow managed through phases (initial → followup → gaps → complete)
 
-### What's Implemented ✅
+### What's Implemented 
 
 - [x] Language selection (English, isiXhosa, isiZulu, Afrikaans)
 - [x] Simulated voice input with microphone UI and recording animation
@@ -99,7 +99,7 @@ index.html              # Single-page app with 4 screen sections
 - [x] Mobile-responsive design optimised for clinic tablet use
 - [x] Privacy notice and clinical disclaimer
 
-### Future Vision 🚀
+### Future Vision 
 
 For the full hackathon build, this prototype would expand to:
 
@@ -112,7 +112,7 @@ For the full hackathon build, this prototype would expand to:
 - [ ] **NDoH alignment**: Map to National Department of Health Ideal Clinic standards
 - [ ] **Analytics dashboard**: Clinic-level triage patterns, wait time reduction metrics
 
-## 🏃 Running Locally
+##  Running Locally
 
 ```bash
 # Clone the repository
@@ -130,7 +130,7 @@ python3 -m http.server 8000
 
 **Demo tip**: Double-tap the TriageAI logo on the welcome screen to auto-fill a TB screening scenario.
 
-## 🌍 South African Context
+##  South African Context
 
 This prototype is designed with deep awareness of the SA PHC landscape:
 
@@ -141,7 +141,7 @@ This prototype is designed with deep awareness of the SA PHC landscape:
 - **Infrastructure reality**: Designed for older devices, slow networks, bright clinic lighting
 - **Nurse-led care**: SA PHC is primarily nurse-driven; the tool augments, not replaces
 
-## 📋 HSIL 2026 Relevance
+##  HSIL 2026 Relevance
 
 This prototype directly addresses HSIL 2026's focus areas:
 
@@ -153,7 +153,7 @@ This prototype directly addresses HSIL 2026's focus areas:
 | Shortage of Healthcare Workers | Reduces nurse triage burden; pre-screens before consultation |
 | Diagnosis & Monitoring | TB/HIV screening integration; chronic disease adherence checks |
 
-## ⚖️ Ethical Considerations
+## Ethical Considerations
 
 - **No real patient data** is collected or stored in this prototype
 - **Clinical disclaimer** is prominently displayed — this is a screening aid, not a diagnostic tool
@@ -161,7 +161,7 @@ This prototype directly addresses HSIL 2026's focus areas:
 - **Privacy by design** — production version would comply with POPIA (SA data protection law)
 - **Equity focus** — multilingual support and low-bandwidth design ensure accessibility
 
-## 📄 License
+##  License
 
 MIT License — Built for the HSIL 2026 Hackathon application.
 
