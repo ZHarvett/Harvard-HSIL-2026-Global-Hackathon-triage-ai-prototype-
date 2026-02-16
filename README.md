@@ -63,7 +63,7 @@ The system screens for:
 - **Medication Adherence**: Chronic conditions detected → adherence check
 - **Follow-up Gaps**: Missed clinic visits → scheduling prompt
 
-## 🛠️ Technical Implementation
+## Technical Implementation
 
 ### Architecture
 
